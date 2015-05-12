@@ -5,12 +5,12 @@
     },
     "require-dev": {
         "riak/riak-client": "dev-master",
-        "microsoft/windowsazure": "dev-master"
-    },          
+        "datastax/php-driver": "dev-master#53846f096a2a8d81bc3300fe8da64911838b34b8"
+    },
     "repositories": [
         {
-            "type": "pear",
-            "url": "http://pear.php.net"
+            "type": "git",
+            "url": "https://github.com/datastax/php-driver.git"
         }
     ],
     "suggest": {
