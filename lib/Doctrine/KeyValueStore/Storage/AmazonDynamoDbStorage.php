@@ -23,7 +23,7 @@ use Aws\DynamoDb\DynamoDbClient;
 use Aws\DynamoDb\Marshaler;
 use Doctrine\KeyValueStore\NotFoundException;
 
-class AmazonDynamoDbStorage implements Storage
+final class AmazonDynamoDbStorage implements Storage
 {
     /**
      * @var DynamoDbClient
@@ -67,10 +67,8 @@ class AmazonDynamoDbStorage implements Storage
             $this->setDefaultKeyName($defaultKeyName);
         }
 
-        if (!empty($tableKeys)) {
-            foreach ($tableKeys as $table => $keyName) {
-                $this->setKeyForTable($table, $keyName);
-            }
+        foreach ($tableKeys as $table => $keyName) {
+            $this->setKeyForTable($table, $keyName);
         }
     }
 
@@ -81,7 +79,7 @@ class AmazonDynamoDbStorage implements Storage
      *
      * @throws \InvalidArgumentException When the key name is invalid.
      */
-    protected function validateKeyName($name)
+    private function validateKeyName($name)
     {
         if (!is_string($name)) {
             throw new \InvalidArgumentException(
@@ -104,7 +102,7 @@ class AmazonDynamoDbStorage implements Storage
      *
      * @throws \InvalidArgumentException When the name is invalid.
      */
-    protected function validateTableName($name)
+    private function validateTableName($name)
     {
         if (!is_string($name)) {
             throw new \InvalidArgumentException(
@@ -124,20 +122,10 @@ class AmazonDynamoDbStorage implements Storage
      *
      * @throws \InvalidArgumentException When the key name is invalid.
      */
-    public function setDefaultKeyName($name)
+    private function setDefaultKeyName($name)
     {
         $this->validateKeyName($name);
         $this->defaultKeyName = $name;
-    }
-
-    /**
-     * Retrieves the default key name.
-     *
-     * @return string The default key name.
-     */
-    public function getDefaultKeyName()
-    {
-        return $this->defaultKeyName;
     }
 
     /**
@@ -148,7 +136,7 @@ class AmazonDynamoDbStorage implements Storage
      *
      * @throws \InvalidArgumentException When the key or table name is invalid.
      */
-    public function setKeyForTable($table, $key)
+    private function setKeyForTable($table, $key)
     {
         $this->validateTableName($table);
         $this->validateKeyName($key);
@@ -178,7 +166,7 @@ class AmazonDynamoDbStorage implements Storage
      *
      * @return array The key in DynamoDB format.
      */
-    protected function prepareKey($storageName, $key)
+    private function prepareKey($storageName, $key)
     {
         if (is_array($key)) {
             $keyValue = reset($key);
@@ -192,23 +180,18 @@ class AmazonDynamoDbStorage implements Storage
     }
 
     /**
-     * Determine if the storage supports updating only a subset of properties,
-     * or if all properties have to be set, even if only a subset of properties
-     * changed.
+     * {@inheritDoc}
      *
-     * @return bool
+     * This is not true, but partial updates are too complicated given the available interface,
+     * meaning, the abstraction is insufficiently flexible enough to support this type of action.
      */
     public function supportsPartialUpdates()
     {
-        //This is not true, but partial updates are too complicated given the available interface,
-        //meaning, the abstraction is insufficiently flexible enough to support this type of action.
         return false;
     }
 
     /**
-     * Does this storage support composite primary keys?
-     *
-     * @return bool
+     * {@inheritDoc}
      */
     public function supportsCompositePrimaryKeys()
     {
@@ -216,9 +199,7 @@ class AmazonDynamoDbStorage implements Storage
     }
 
     /**
-     * Does this storage require composite primary keys?
-     *
-     * @return bool
+     * {@inheritDoc}
      */
     public function requiresCompositePrimaryKeys()
     {
@@ -226,11 +207,7 @@ class AmazonDynamoDbStorage implements Storage
     }
 
     /**
-     * Insert data into the storage key specified.
-     *
-     * @param string       $storageName
-     * @param array|string $key
-     * @param array        $data
+     * {@inheritDoc}
      */
     public function insert($storageName, $key, array $data)
     {
@@ -241,23 +218,16 @@ class AmazonDynamoDbStorage implements Storage
     }
 
     /**
-     * Update data into the given key.
-     *
-     * @param string       $storageName
-     * @param array|string $key
-     * @param array        $data
+     * {@inheritDoc}
      */
     public function update($storageName, $key, array $data)
     {
-        //We are using PUT so we just replace the original item
+        // We are using PUT so we just replace the original item
         $this->insert($storageName, $key, $data);
     }
 
     /**
-     * Delete data at key.
-     *
-     * @param string       $storageName
-     * @param array|string $key
+     * {@inheritDoc}
      */
     public function delete($storageName, $key)
     {
@@ -268,16 +238,7 @@ class AmazonDynamoDbStorage implements Storage
     }
 
     /**
-     * Find data at key.
-     *
-     * Important note: The returned array does contain the identifier (again)!
-     *
-     * @throws NotFoundException When data with key is not found.
-     *
-     * @param string       $storageName
-     * @param array|string $key
-     *
-     * @return array
+     * {@inheritDoc}
      */
     public function find($storageName, $key)
     {
@@ -300,9 +261,7 @@ class AmazonDynamoDbStorage implements Storage
     }
 
     /**
-     * Return a name of the underlying storage.
-     *
-     * @return string
+     * {@inheritDoc}
      */
     public function getName()
     {

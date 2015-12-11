@@ -2,11 +2,11 @@
     "name": "doctrine/key-value-store",
     "require": {
         "php": ">=5.5",
-        "doctrine/common": "^2.4",
-        "doctrine/couchdb": "^1.0.0-beta4"
+        "doctrine/common": "^2.4"
     },
     "require-dev": {
-        "aws/aws-sdk-php": "^3.8",
+        "doctrine/couchdb": "^1.0.0-beta4",
+        "aws/aws-sdk-php": "^3.11",
         "phpunit/phpunit": "^4.8",
         "riak/riak-client": "dev-master"
     },
