@@ -2,14 +2,14 @@
     "name": "doctrine/key-value-store",
     "require": {
         "php": "^5.5|^7.0",
-        "doctrine/common": "^2.4",
-        "doctrine/couchdb": "^1.0.0-beta4"
+        "doctrine/common": "^2.4"
     },
     "require-dev": {
         "datastax/php-driver": "^1.0",
         "doctrine/couchdb": "^1.0.0-beta4",
         "phpunit/phpunit": "^4.8|^5.0",
-        "aws/aws-sdk-php": "^3.8"
+        "aws/aws-sdk-php": "^3.8",
+        "riak/riak-client": "dev-master"
     },
     "suggest": {
         "aws/aws-sdk-php": "to use the DynamoDB storage",
